@@ -1,0 +1,8 @@
+# paso 1 crear el proyecto de React
+
+FROM node:alpine:3.16 as build
+WORKDIR /APP
+COPY package.json ./
+RUN npm install
+COPY . .
+RUN npm run build 

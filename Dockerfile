@@ -1,0 +1,17 @@
+# Step 1 build  proyect the  node-React
+
+FROM node:alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY ./ ./
+RUN npm run build 
+
+# Step 2  create serv nginx server
+
+FROM nginx:1.16.0-alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.conf /etc/nginx/conf.d
+EXPOSE 80
+CMD [ "nginx","-g","daemon off;" ]
