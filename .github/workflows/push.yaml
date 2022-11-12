@@ -1,73 +1,73 @@
-  name: Backend Chat CI/CD
+name: Backend Chat CI/CD
 
-  on:
-    push:
-      branches:
+on:
+  push:
+    branches:
       - main
-    pull_request:
-      branches:
+  pull_request:
+    branches:
       - main
-    jobs:
-      ci:
-        runs-on: ubuntu-latest
-        steps:
-          - uses: actions/checkout@v1
-          - name: Docker login
-            run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          - name: Build
-            run: docker build -t pindevops .
-          - name: Tags
-            run: |
-              docker tag pindevops ${{ secrets.DOCKER_USERNAME }}/pindevops:${{ github.sha }}
-              docker tag pindevops ${{ secrets.DOCKER_USERNAME }}/pindevops:latest
-          - name: Push
-            run: |
-              docker push ${{ secrets.DOCKER_USERNAME }}/pindevops:${{ github.sha }}
-              docker push ${{ secrets.DOCKER_USERNAME }}/pindevops:latest
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Docker login
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build
+        run: docker build -t pindevops .
+      - name: Tags
+        run: |
+          docker tag pindevops ${{ secrets.DOCKER_USERNAME }}/pindevops:${{ github.sha }}
+          docker tag pindevops ${{ secrets.DOCKER_USERNAME }}/pindevops:latest
+      - name: Push
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/pindevops:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/pindevops:latest
 
-  # deploy-to-cluster:
-  #   name: deploy to cluster
-  #   runs-on: ubuntu-latest
-  #   needs: build-and-push
-  #   steps:
-  #   - name: deploy to cluster
-  #     uses: steebchen/kubectl@master
-  #     env:
-  #       KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-  #     with:
-  #       args: set image --record deployment/my-app prueba-gha=${{ github.repository }}:${{ github.sha }}
-  #   - name: verify deployment
-  #     uses: steebchen/kubectl@master
-  #     env:
-  #       KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-  #       KUBECTL_VERSION: "1.20"
-  #     with:
-  #       args: '"rollout status deployment/my-app"'
-  # ngrok-watcher:
-  #   name: Ngrok watcher
-  #   runs-on: ubuntu-latest
-  #   needs: deploy-to-cluster
-  #   steps:
-  #   - name: Get ngrok URL
-  #     id: getNgrokUrl
-  #     uses: debianmaster/kubectl@master
-  #     env:
-  #       KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-  #       KUBECTL_VERSION: "1.20"
-  #     with:
-  #       args: |
-  #         URL=`kubectl -n prueba get ngrok -o=custom-columns='DATA:status.url' | tail -n1` 
-  #         echo "::set-output name=url::$URL"
-    # - name: Check if URL is valid
-    #   uses: ubuntu-latest
-    #   run: |
-    #     echo "URL is: ${{ steps.getNgrokUrl.outputs.url }}"
-      # - name: Watch ngrok
-      # uses: steebchen/kubectl@master
-      # env:
-      #   KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-      #   KUBECTL_VERSION: "1.20"
-      # run: echo "Hello world"
-      # # with:
-      # #   args: '"rollout status deployment/my-app"'
+# deploy-to-cluster:
+#   name: deploy to cluster
+#   runs-on: ubuntu-latest
+#   needs: build-and-push
+#   steps:
+#   - name: deploy to cluster
+#     uses: steebchen/kubectl@master
+#     env:
+#       KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+#     with:
+#       args: set image --record deployment/my-app prueba-gha=${{ github.repository }}:${{ github.sha }}
+#   - name: verify deployment
+#     uses: steebchen/kubectl@master
+#     env:
+#       KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+#       KUBECTL_VERSION: "1.20"
+#     with:
+#       args: '"rollout status deployment/my-app"'
+# ngrok-watcher:
+#   name: Ngrok watcher
+#   runs-on: ubuntu-latest
+#   needs: deploy-to-cluster
+#   steps:
+#   - name: Get ngrok URL
+#     id: getNgrokUrl
+#     uses: debianmaster/kubectl@master
+#     env:
+#       KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+#       KUBECTL_VERSION: "1.20"
+#     with:
+#       args: |
+#         URL=`kubectl -n prueba get ngrok -o=custom-columns='DATA:status.url' | tail -n1`
+#         echo "::set-output name=url::$URL"
+# - name: Check if URL is valid
+#   uses: ubuntu-latest
+#   run: |
+#     echo "URL is: ${{ steps.getNgrokUrl.outputs.url }}"
+# - name: Watch ngrok
+# uses: steebchen/kubectl@master
+# env:
+#   KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+#   KUBECTL_VERSION: "1.20"
+# run: echo "Hello world"
+# # with:
+# #   args: '"rollout status deployment/my-app"'
 
