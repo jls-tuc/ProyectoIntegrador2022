@@ -21,9 +21,9 @@
               docker tag back ${{ secrets.DOCKER_USERNAME }}/back:${{ github.sha }}
               docker tag back ${{ secrets.DOCKER_USERNAME }}/back:latest
           - name: Push
-              run: |
-                docker push ${{ secrets.DOCKER_USERNAME }}/back:${{ github.sha }}
-                docker push ${{ secrets.DOCKER_USERNAME }}/back:latest
+            run: |
+              docker push ${{ secrets.DOCKER_USERNAME }}/back:${{ github.sha }}
+              docker push ${{ secrets.DOCKER_USERNAME }}/back:latest
 
   # deploy-to-cluster:
   #   name: deploy to cluster
