@@ -18,12 +18,12 @@
             run: docker build -t pindevops .
           - name: Tags
             run: |
-              docker tag back ${{ secrets.DOCKER_USERNAME }}/back:${{ github.sha }}
-              docker tag back ${{ secrets.DOCKER_USERNAME }}/back:latest
+              docker tag pindevops ${{ secrets.DOCKER_USERNAME }}/pindevops:${{ github.sha }}
+              docker tag pindevops ${{ secrets.DOCKER_USERNAME }}/pindevops:latest
           - name: Push
             run: |
-              docker push ${{ secrets.DOCKER_USERNAME }}/back:${{ github.sha }}
-              docker push ${{ secrets.DOCKER_USERNAME }}/back:latest
+              docker push ${{ secrets.DOCKER_USERNAME }}/pindevops:${{ github.sha }}
+              docker push ${{ secrets.DOCKER_USERNAME }}/pindevops:latest
 
   # deploy-to-cluster:
   #   name: deploy to cluster
