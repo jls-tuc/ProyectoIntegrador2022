@@ -1,0 +1,8 @@
+version: "3"
+services:
+  appWeb:
+    container_name: pinwebnginx
+    restart: always
+    build: .
+    ports:
+      - 80:80
